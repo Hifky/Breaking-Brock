@@ -4,63 +4,15 @@ const context = canvas.getContext('2d');
 canvas.width = 800;
 canvas.height = 600;
 
-let player = {
-    x: canvas.width / 2,
-    y: canvas.height - 30,
-    width: 50,
-    height: 50,
-    dx: 0
-};
+let gameOver = false;
 
-function drawPlayer() {
-    context.fillStyle = 'green';
-    context.fillRect(player.x, player.y, player.width, player.height);
-}
-
-function update() {
-    player.x += player.dx;
-
-    if (player.x + player.width > canvas.width || player.x < 0) {
-        player.dx = 0;
-    }
-}
-
-function gameLoop() {
-    context.clearRect(0, 0, canvas.width, canvas.height);
-    drawBricks();
-    drawBall();
-    drawPaddle();
-    moveBall();
-    movePaddle();
-    collisionDetection();
-    requestAnimationFrame(gameLoop);
-}
-
-gameLoop();
-
-
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'ArrowRight') {
-        player.dx = 5;
-    } else if (event.key === 'ArrowLeft') {
-        player.dx = -5;
-    }
-});
-
-document.addEventListener('keyup', function(event) {
-    if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
-        player.dx = 0;
-    }
-});
-
-gameLoop();
-
-// パドルの設定
 let paddle = {
     height: 10,
     width: 75,
     x: (canvas.width - 75) / 2,
-    dx: 7
+    dx: 7,
+    rightPressed: false,
+    leftPressed: false
 };
 
 function drawPaddle() {
@@ -76,6 +28,8 @@ document.addEventListener('keydown', function(event) {
         paddle.rightPressed = true;
     } else if (event.key === 'ArrowLeft') {
         paddle.leftPressed = true;
+    } else if (gameOver && event.key !== '') {
+        resetGame();
     }
 });
 
@@ -95,7 +49,6 @@ function movePaddle() {
     }
 }
 
-// ボールの設定
 let ball = {
     x: canvas.width / 2,
     y: canvas.height - 30,
@@ -116,24 +69,20 @@ function moveBall() {
     ball.x += ball.dx;
     ball.y += ball.dy;
 
-    // 壁との衝突判定
     if (ball.x + ball.dx > canvas.width - ball.radius || ball.x + ball.dx < ball.radius) {
         ball.dx = -ball.dx;
     }
     if (ball.y + ball.dy < ball.radius) {
         ball.dy = -ball.dy;
     } else if (ball.y + ball.dy > canvas.height - ball.radius) {
-        // パドルとの衝突判定
         if (ball.x > paddle.x && ball.x < paddle.x + paddle.width) {
             ball.dy = -ball.dy;
         } else {
-            // ゲームオーバー
-            document.location.reload();
+            gameOver = true;
         }
     }
 }
 
-// ブロックの設定
 let brickRowCount = 3;
 let brickColumnCount = 5;
 let brickWidth = 75;
@@ -182,3 +131,43 @@ function collisionDetection() {
     }
 }
 
+function drawGameOver() {
+    context.font = "48px Arial";
+    context.fillStyle = "#0095DD";
+    context.fillText("GAME OVER", canvas.width / 2 - 150, canvas.height / 2);
+}
+
+function resetGame() {
+    gameOver = false;
+    ball.x = canvas.width / 2;
+    ball.y = canvas.height - 30;
+    ball.dx = 2;
+    ball.dy = -2;
+    paddle.x = (canvas.width - paddle.width) / 2;
+
+    for (let c = 0; c < brickColumnCount; c++) {
+        for (let r = 0; r < brickRowCount; r++) {
+            bricks[c][r].status = 1;
+        }
+    }
+
+    gameLoop();
+}
+
+function gameLoop() {
+    if (gameOver) {
+        drawGameOver();
+        return;
+    }
+
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    drawBricks();
+    drawBall();
+    drawPaddle();
+    moveBall();
+    movePaddle();
+    collisionDetection();
+    requestAnimationFrame(gameLoop);
+}
+
+gameLoop();
