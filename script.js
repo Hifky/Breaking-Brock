@@ -141,8 +141,8 @@ function resetGame() {
     gameOver = false;
     ball.x = canvas.width / 2;
     ball.y = canvas.height - 30;
-    ball.dx = 2;
-    ball.dy = -2;
+    ball.dx = 4;
+    ball.dy = -4;
     paddle.x = (canvas.width - paddle.width) / 2;
 
     for (let c = 0; c < brickColumnCount; c++) {
