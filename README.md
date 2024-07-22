@@ -1,2 +1,2 @@
 # Breaking-Brock
-This is a game.
+This is a breaking-brock game.
