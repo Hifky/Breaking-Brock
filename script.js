@@ -7,7 +7,7 @@ canvas.height = 600; //描画する範囲の縦を指定
 
 //ゲームオーバーフラグの初期値の設定
 let gameOver = false;
-
+//ゲームクリアフラグの初期値の設定
 let gameClear = false;
 
 //パドルの初期設定
@@ -20,11 +20,11 @@ let paddle = {
 
 //パドルの描画
 function drawPaddle() {
-    context.beginPath(); //ここを変えるとボールの色がパドルと同じ色になった
-    context.rect(paddle.x, canvas.height - paddle.height, paddle.width, paddle.height);
+    context.beginPath(); //これから線を描くことを示す
+    context.rect(paddle.x, canvas.height - paddle.height, paddle.width, paddle.height); //rect()→矩形を追加
     context.fillStyle = "#0000FF"; //パドルの色
-    context.fill();
-    context.closePath();
+    context.fill(); //矩形内の塗りつぶし
+    context.closePath(); //線を描き終わったことを示す
 }
 
 //キー入力によるパドル操作の方法の割り当てとゲームオーバー時の指示
@@ -66,11 +66,11 @@ let ball = {
 };
 //ボールの描画
 function drawBall() {
-    context.beginPath();
-    context.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+    context.beginPath(); //これから線を描くことを示す
+    context.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2); //円を描いている、arc()は円を描くメソッド
     context.fillStyle = "#00AA00"; //ボールのカラーリング
-    context.fill();
-    context.closePath();
+    context.fill(); //円の内部を塗りつぶし
+    context.closePath(); //線を描き終わったことを示す
 }
 
 //ボールの動き方の設定(ブロック衝突時を除く)
@@ -92,10 +92,10 @@ function moveBall() {
     }
 }
 
-let brickRowCount = 4;    //列(縦)の数を指定
-let brickColumnCount = 8; //行(横)の数を指定
-let brickWidth = 70;      //ブロックの幅
-let brickHeight = 20;     //ブロックの厚さ
+let brickRowCount = 1;    //列(縦)の数を指定
+let brickColumnCount = 1; //行(横)の数を指定
+let brickWidth = 700;      //ブロックの幅
+let brickHeight = 200;     //ブロックの厚さ
 let brickPadding = 20;    //ブロックの間隔
 let brickOffsetTop = 20;  //ブロックの一番上の行と天井の間隔
 let brickOffsetLeft = 20; //ブロックの一番左の列と壁の間隔
@@ -129,7 +129,7 @@ function drawBricks() {
     }
 }
 
-//ブロックとボールの衝突判定
+//ブロックとボールの衝突判定と衝突時のボールの動き
 function collisionDetection() {
     for (let c = 0; c < brickColumnCount; c++) { //
         for (let r = 0; r < brickRowCount; r++) {
@@ -164,6 +164,7 @@ function drawGameClear() {
 
 //ゲームをリセット
 function resetGame() {
+    brickConut = brickRowCount * brickColumnCount;
     gameOver = false;
     gameClear = false;
     ball.x = canvas.width / 2;
@@ -193,7 +194,7 @@ function gameLoop() {
         return;
     }
 
-    context.clearRect(0, 0, canvas.width, canvas.height);
+    context.clearRect(0, 0, canvas.width, canvas.height); //矩形領域を透明に描ける
     drawBricks(); //ブロック群の描画
     drawBall();   //ボールの描画
     drawPaddle(); //パドルの描画
