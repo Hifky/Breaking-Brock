@@ -93,7 +93,7 @@ function moveBall() {
 }
 
 let brickRowCount = 4;    //列(縦)の数を指定
-let brickColumnCount = 9; //行(横)の数を指定
+let brickColumnCount = 8; //行(横)の数を指定
 let brickWidth = 70;      //ブロックの幅
 let brickHeight = 20;     //ブロックの厚さ
 let brickPadding = 20;    //ブロックの間隔
