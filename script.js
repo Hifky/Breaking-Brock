@@ -2,7 +2,7 @@ const canvas = document.getElementById('gameCanvas');
 const context = canvas.getContext('2d');
 
 //描画する広さの指定
-canvas.width = 800;  //描画する範囲の横を指定
+canvas.width = 820;  //描画する範囲の横を指定
 canvas.height = 600; //描画する範囲の縦を指定
 
 //ゲームオーバーフラグの初期値の設定
@@ -92,10 +92,10 @@ function moveBall() {
     }
 }
 
-let brickRowCount = 1;    //列(縦)の数を指定
-let brickColumnCount = 1; //行(横)の数を指定
-let brickWidth = 700;      //ブロックの幅
-let brickHeight = 200;     //ブロックの厚さ
+let brickRowCount = 4;    //列(縦)の数を指定
+let brickColumnCount = 8; //行(横)の数を指定
+let brickWidth = 80;      //ブロックの幅
+let brickHeight = 20;     //ブロックの厚さ
 let brickPadding = 20;    //ブロックの間隔
 let brickOffsetTop = 20;  //ブロックの一番上の行と天井の間隔
 let brickOffsetLeft = 20; //ブロックの一番左の列と壁の間隔
@@ -136,8 +136,9 @@ function collisionDetection() {
             let b = bricks[c][r];
             if (b.status == 1) { //ブロックが存在することを確認
                 if (ball.x > b.x && ball.x < b.x + brickWidth && ball.y > b.y && ball.y < b.y + brickHeight) {
-                    ball.dy = -ball.dy; //ボールの動きは反転させる(反射)
+                    ball.dy = -ball.dy * 1.02; //ボールの動きは反転させ加速(反射)
                     b.status = 0; //ブロックは破壊されたのでステータスを0に設定
+                    score += 1; //スコアを1追加
                     brickConut -= 1;
                     if (brickConut == 0){
                         gameClear = true
@@ -182,6 +183,15 @@ function resetGame() {
     gameLoop();
 }
 
+//スコアを表示
+let score = 0;
+function drawScore() {
+    ctx.font = "16px Arial";
+    ctx.fillStyle = "#0095DD";
+    ctx.fillText(`Score: ${score}`, 8, 20);
+  }
+  
+
 //ゲームを流れを定義
 function gameLoop() {
     if (gameOver) {
@@ -194,13 +204,14 @@ function gameLoop() {
         return;
     }
 
-    context.clearRect(0, 0, canvas.width, canvas.height); //矩形領域を透明に描ける
+    context.clearRect(0, 0, canvas.width, canvas.height); //矩形領域を透明に描く
     drawBricks(); //ブロック群の描画
     drawBall();   //ボールの描画
     drawPaddle(); //パドルの描画
     moveBall();   //ボールの動き方の指定
     movePaddle(); //パドルの動き方を指定
     collisionDetection(); //ブロックとボールの衝突を判定
+    //drawScore(); //スコアを表示
     requestAnimationFrame(gameLoop);
 }
 
