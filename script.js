@@ -22,7 +22,7 @@ let paddle = {
 function drawPaddle() {
     context.beginPath(); //これから線を描くことを示す
     context.rect(paddle.x, canvas.height - paddle.height, paddle.width, paddle.height); //rect()→矩形を追加
-    context.fillStyle = "#0000FF"; //パドルの色
+    context.fillStyle = "#ff0000"; //パドルの色
     context.fill(); //矩形内の塗りつぶし
     context.closePath(); //線を描き終わったことを示す
 }
@@ -68,7 +68,7 @@ let ball = {
 function drawBall() {
     context.beginPath(); //これから線を描くことを示す
     context.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2); //円を描いている、arc()は円を描くメソッド
-    context.fillStyle = "#00AA00"; //ボールのカラーリング
+    context.fillStyle = "#00ff00"; //ボールのカラーリング
     context.fill(); //円の内部を塗りつぶし
     context.closePath(); //線を描き終わったことを示す
 }
@@ -121,7 +121,7 @@ function drawBricks() {
                 bricks[c][r].y = brickY;
                 context.beginPath();
                 context.rect(brickX, brickY, brickWidth, brickHeight);
-                context.fillStyle = "#000000"; //ブロックの色指定
+                context.fillStyle = "#0000ff"; //ブロックの色指定
                 context.fill();
                 context.closePath();
             }
@@ -152,14 +152,14 @@ function collisionDetection() {
 //ゲームオーバーを表示
 function drawGameOver() {
     context.font = "80px Courier New"; //GAME OVERの表示のサイズとフォントを選択
-    context.fillStyle = "#000000"; //GAME OVERの表示の色を選択
+    context.fillStyle = "#ffffff"; //GAME OVERの表示の色を選択
     context.fillText("GAME OVER", canvas.width / 2 - 200, canvas.height / 2 + 50); //画面の中央に文字を配置
 }
 
 //ゲームクリアを表示
 function drawGameClear() {
     context.font = "80px Courier New"; //Congratulations!の表示のサイズとフォントを選択
-    context.fillStyle = "#000000"; //Congratulations!の表示の色を選択
+    context.fillStyle = "#ffffff"; //Congratulations!の表示の色を選択
     context.fillText("Congratulations!", canvas.width / 2 - 375, canvas.height / 2); //画面の中央に文字を配置
 }
 
